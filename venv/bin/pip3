@@ -1,4 +1,4 @@
-#!/home/stissshak/Documents/Games/TAOR/bin/python3
+#!/home/stissshak/Documents/The-Art-of-Rest/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -4,19 +4,20 @@ class Object:
         self.collider = collider
         obj_list.add(self)
 
-    def del(self):
+    def delete(self, obj_list):
+        obj_list.delete(self)
 
 class ObjectList:
     def __init__(self):
         self.list = list()
 
     def add(self, obj):
-        if not isinstance(obj, Object):
+        if not isinstance(obj, Object) and not issubclass(obj, Object):
             raise TypeError("obj type is not Object")
         self.list.append(obj)
 
-    def del(self, obj):
-        if not isinstance(obj, Object):
+    def delete(self, obj):
+        if not isinstance(obj, Object) and not issubclass(obj, Object):
             raise TypeError("obj type is not Object")
         self.list.remove(obj)
 

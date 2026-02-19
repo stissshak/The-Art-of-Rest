@@ -1,4 +1,6 @@
 import pygame
+from game.entities.objects import ObjectList as OL 
+from game.entities.player import Player as Player
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -6,7 +8,10 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+ol = OL()
+p = Player((pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2), 0, 0)
+)
+
 
 while running:
     for event in pygame.event.get():
@@ -15,19 +20,9 @@ while running:
 
     screen.fill("purple")
 
-    pygame.draw.circle(screen, "red", player_pos, 40)
+    p.move(screen)
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
-
-    # flip() the display to put your work on screen
+        # flip() the display to put your work on screen
     pygame.display.flip()
 
     # limits FPS to 60

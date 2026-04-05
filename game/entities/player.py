@@ -1,4 +1,5 @@
-from objects import Object
+from .objects import Object
+import pygame
 
 class Player(Object):
     def __init__(self, vector, collider, sprite):

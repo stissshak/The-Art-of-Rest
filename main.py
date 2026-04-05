@@ -9,8 +9,7 @@ running = True
 dt = 0
 
 ol = OL()
-p = Player((pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2), 0, 0)
-)
+p = Player(pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2), 0, 0)
 
 
 while running:
@@ -22,12 +21,8 @@ while running:
 
     p.move(screen)
 
-        # flip() the display to put your work on screen
     pygame.display.flip()
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
     dt = clock.tick(60) / 1000
 
 pygame.quit()

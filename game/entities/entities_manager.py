@@ -4,7 +4,7 @@ from typing import List, Type
 from .entity import Entity
 
 class EntityManager:
-    """ Manager for all game's objects """"
+    """ Manager for all game's objects """
     
     def __init__(self):
         self.entities: List[Entity] = []

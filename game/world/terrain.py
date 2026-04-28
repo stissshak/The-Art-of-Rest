@@ -1,10 +1,14 @@
 import numpy as np
 import perlin as pr
 import matplotlib.pyplot as plot
+from config import Config 
+
+class Terrain:
+    def _create_terrain():
 
 # размеры карты
-width = 1920
-height = 1080
+width = Config.SCREEN_WIDTH
+height = Config.SCREEN_HEIGHT
 
 # 1D координаты для heightmap
 x = np.linspace(0, 10, width)

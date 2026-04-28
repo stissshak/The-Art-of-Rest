@@ -4,7 +4,7 @@ import pygame
 from config import Config
 from game.engine.input_handler import InputHandler
 from game.physics.physics_engine import PhysicsEngine
-from game.entities.entity_manager import EntityManager
+from game.entities.entities_manager import EntityManager
 from game.entities.player import Player
 
 class Game:
@@ -87,12 +87,12 @@ class Game:
         pygame.display.flip()
     
     def _draw_ui(self):
-        # TODO Athrur
+        # TODO Arthur
         font = pygame.font.Font(None, 36)
         current_player = self.get_current_player()
         if current_player:
             text = font.render(f"Current: {current_player.name}", True, (0, 0, 0))
-            self.screen.blit(text, (10, 10))
+            self.screen.blit(text, (10, 10)) 
     
     def run(self):
         while self.running:

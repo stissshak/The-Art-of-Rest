@@ -22,13 +22,13 @@ class Entity:
         )
     
     def update(self, dt: float):
-        # Will overrided
+        # Will be overrided
         pass
     
     def draw(self, screen: pygame.Surface):
-        # Will overrided
+        # Will be overrided
         pass
     
-    ef destroy(self):
+    def destroy(self):
         self.active = False
 

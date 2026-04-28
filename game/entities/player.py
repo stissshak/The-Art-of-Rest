@@ -11,6 +11,9 @@ class Player(Entity):
         self.hp = 100
         self.max_hp = 100
         self.team = team
+        self.feet_y = self.position.y + self.height / 2
+        self.head_y = self.position.y + self.height / 2
+        
 
         self.width = 20
         self.height = 30
@@ -66,9 +69,11 @@ class Player(Entity):
     def heal(self, amount: int):
         self.hp = min(self.hp + amount, self.max_hp)
 
-    # Arthur
     def draw(self, screen: pygame.Surface):
-        pass
+        pygame.draw.rect(screen, self.color, (self.position.x, self.position.y, self.width, self.height), width=1)
+        self._draw_hp_bar(screen)
     
     def _draw_hp_bar(self, screen: pygame.Surface):
-        pass
+        font = pygame.font.Font(None, 20)
+        text = font.render(str(self.hp), True, self.color)
+        screen.blit(text, (self.position + (0, -self.height / 2)))

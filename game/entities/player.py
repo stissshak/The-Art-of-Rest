@@ -38,10 +38,10 @@ class Player(Entity):
 
     def handle_input(self, input_handler, events):
         self.move_dir = 0
-        if input_handler.is_key_down(pygame.K_a):
+        if input_handler.is_key_down(pygame.K_a) or input_handler.is_key_down(pygame.K_LEFT):
             self.move_dir = -1
             self.facing_right = False
-        elif input_handler.is_key_down(pygame.K_d):
+        elif input_handler.is_key_down(pygame.K_d) or input_handler.is_key_down(pygame.K_RIGHT):
             self.move_dir = 1
             self.facing_right = True
 

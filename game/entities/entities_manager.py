@@ -21,6 +21,12 @@ class EntityManager:
             raise TypeError(f"Expected Entity, got {type(entity).__name__}")
         self._to_remove.append(entity)
     
+    def flush(self):
+        """Apply queued adds immediately (without running an update tick)."""
+        if self._to_add:
+            self.entities.extend(self._to_add)
+            self._to_add.clear()
+
     def update(self, dt: float):
         if self._to_add:
             self.entities.extend(self._to_add)

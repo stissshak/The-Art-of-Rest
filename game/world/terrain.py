@@ -109,7 +109,6 @@ class Terrain:
         self.mask[y0:y1, x0:x1][disk] = False
 
         pygame.draw.circle(self.surface, self.COLORKEY, (cx, cy), radius)
-        pygame.draw.circle(self.surface, self.CRATER_RIM, (cx, cy), radius, width=3)
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.surface, (0, 0))

@@ -15,8 +15,8 @@ class Entity:
 
     def get_rect(self) -> pygame.Rect:
         return pygame.Rect(
-            self.position.x - self.width // 2,
-            self.position.y - self.height // 2,
+            self.position.x,
+            self.position.y,
             self.width,
             self.height
         )

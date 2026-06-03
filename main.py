@@ -6,6 +6,7 @@ from game.engine.input_handler import InputHandler
 from game.physics.physics_engine import PhysicsEngine
 from game.entities.entities_manager import EntityManager
 from game.entities.player import Player
+from game.world.terrain import Terrain
 
 class Game:
     def __init__(self):
@@ -17,8 +18,9 @@ class Game:
         
         self.input_handler = InputHandler()
         self.entity_manager = EntityManager()
-        self.physics_engine = PhysicsEngine()
-        
+        self.terrain = Terrain()
+        self.physics_engine = PhysicsEngine(self.terrain)
+
         self._create_players()
         self.current_player_index = 0
     
@@ -69,16 +71,14 @@ class Game:
             current_player.handle_input(self.input_handler, events)
     
     def update(self, dt: float):
-        self.physics_engine.update(dt)
         self.entity_manager.update(dt)
+        self.physics_engine.update(dt)
     
     def render(self):
-        self.screen.fill((135, 206, 235))  # Sky (TODO Arhtur)
-        
-        # Ground (TODO Arthur)
-        pygame.draw.rect(self.screen, (100, 200, 100), 
-                        (0, 600, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT - 600))
-        
+        self.screen.fill((135, 206, 235))
+
+        self.terrain.draw(self.screen)
+
         self.entity_manager.draw(self.screen)
         
         # UI

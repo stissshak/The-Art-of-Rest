@@ -1,1 +1,5 @@
-pygame==2.6.1
+# pygame-ce is the maintained fork with Python 3.14 support.
+# Do NOT also install `pygame` — both use the `pygame` namespace and
+# installing both corrupts compiled modules (e.g. font.render).
+pygame-ce>=2.5.5
+numpy>=1.26

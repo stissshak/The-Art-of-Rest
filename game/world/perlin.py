@@ -33,20 +33,6 @@ def fade(f):
 
 
 def gradient_vectorized(c, x, y):
-    """
-    Vectorized gradient: c, x, y могут быть массивами одинаковой формы
-    """
-    vectors = np.array([[0,1],[0,-1],[1,0],[-1,0]])
-    # если массив
-    if np.ndim(c) > 0:
-        result = np.empty_like(c, dtype=float)
-        it = np.nditer(c, flags=['multi_index'])
-        while not it.finished:
-            idx = it.multi_index
-            grad = vectors[c[idx] % 4]
-            result[idx] = grad[0]*x[idx] + grad[1]*y[idx]
-            it.iternext()
-        return result
-    else:
-        grad = vectors[c % 4]
-        return grad[0]*x + grad[1]*y
+    vectors = np.array([[0, 1], [0, -1], [1, 0], [-1, 0]])
+    grad = vectors[np.asarray(c) % 4]
+    return grad[..., 0] * x + grad[..., 1] * y

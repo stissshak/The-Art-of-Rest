@@ -24,6 +24,12 @@ class Player(Entity):
         self.air_accel = Config.AIR_ACCEL
         self.ground_time = 0.0     # seconds continuously grounded (gates jumps)
 
+        # Ninja rope: when roped the worm hangs from rope_anchor on a rope_length
+        # tether; the physics engine enforces the distance constraint.
+        self.roped = False
+        self.rope_anchor = None
+        self.rope_length = 0.0
+
         self.color = self._get_team_color()
         self.name = f"Worm {team}"
 
@@ -56,9 +62,32 @@ class Player(Entity):
                 self.velocity.y = Config.BACKFLIP_VY
                 self.on_ground = False
 
+    def center(self) -> pygame.Vector2:
+        return pygame.Vector2(self.position.x + self.width / 2,
+                              self.position.y + self.height / 2)
+
+    def attach_rope(self, anchor: pygame.Vector2, length: float):
+        self.roped = True
+        self.rope_anchor = pygame.Vector2(anchor)
+        self.rope_length = length
+        self.on_ground = False
+
+    def detach_rope(self):
+        self.roped = False
+        self.rope_anchor = None
+
     def update(self, dt: float):
         # Grounded time gates the jump cooldown; resets the moment we're airborne.
         self.ground_time = self.ground_time + dt if self.on_ground else 0.0
+
+        # Roped: A/D add a tangential push so the worm pumps the swing. The
+        # rope-length constraint itself lives in the physics engine.
+        if self.roped and self.rope_anchor is not None:
+            offset = self.center() - self.rope_anchor
+            if offset.length_squared() > 0 and self.move_dir != 0:
+                tangent = pygame.Vector2(offset.y, -offset.x).normalize()
+                self.velocity += tangent * self.move_dir * Config.ROPE_SWING_ACCEL * dt
+            return
 
         # Ease toward the input target on the ground; in the air keep jump
         # momentum unless actively steering.

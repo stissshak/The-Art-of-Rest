@@ -33,6 +33,9 @@ class PhysicsEngine:
             self._move_x(entity, dt)
             self._move_y(entity, dt)
 
+            if getattr(entity, 'roped', False) and entity.rope_anchor is not None:
+                self._apply_rope(entity)
+
             if hasattr(entity, 'on_ground'):
                 probe = entity.get_rect()
                 probe.y += 1
@@ -86,6 +89,22 @@ class PhysicsEngine:
                 if self.terrain.rect_collides(entity.get_rect()):
                     entity.position.y -= 1
                     break
+
+    def _apply_rope(self, entity):
+        # Keep the worm's centre within rope_length of the anchor: pull it back
+        # onto the circle and kill any outward (radial) velocity so what's left
+        # is the tangential swing.
+        cx = entity.position.x + entity.width / 2
+        cy = entity.position.y + entity.height / 2
+        offset = pygame.Vector2(cx, cy) - entity.rope_anchor
+        dist = offset.length()
+        if dist <= entity.rope_length or dist == 0:
+            return
+        n = offset / dist
+        entity.position -= n * (dist - entity.rope_length)
+        radial = entity.velocity.dot(n)
+        if radial > 0:
+            entity.velocity -= n * radial
 
     def _move_y(self, entity, dt):
         delta = entity.velocity.y * dt

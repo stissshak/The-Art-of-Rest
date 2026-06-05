@@ -39,8 +39,6 @@ class Game:
         self.retreat_timer = None
         self.explosions = []          # [x, y, age] short-lived blast flashes
         self.aim_angle = 45.0         # elevation in degrees for keyboard aiming
-        self.aim_mode = 'mouse'       # 'mouse' or 'keyboard' — last input device used
-        self._last_mouse = (0, 0)
     
     def _create_players(self):
         # Team 1 (Red)
@@ -103,7 +101,6 @@ class Game:
         self.has_fired = False
         self.retreat_timer = None
         self.aim_angle = 45.0
-        self._last_mouse = self.input_handler.mouse_pos
 
     def _update_weapon(self, dt: float):
         tm = self.turn_manager
@@ -114,25 +111,20 @@ class Game:
 
         ih = self.input_handler
 
-        # Aim: Up/Down keys adjust the angle; moving the mouse switches to mouse aim.
         if not self.charging:
-            if ih.mouse_pos != self._last_mouse:
-                self.aim_mode = 'mouse'
-                self._last_mouse = ih.mouse_pos
-            up = ih.is_key_down(pygame.K_UP)
-            down = ih.is_key_down(pygame.K_DOWN)
+            up = ih.is_key_down(pygame.K_UP) or ih.is_key_down(pygame.K_w)
+            down = ih.is_key_down(pygame.K_DOWN) or ih.is_key_down(pygame.K_s)
             if up or down:
                 self.aim_mode = 'keyboard'
                 self.aim_angle += (up - down) * Config.AIM_SPEED * dt
                 self.aim_angle = max(-85.0, min(85.0, self.aim_angle))
 
         # Charge while LMB or F is held, fire on release.
-        firing_held = ih.mouse_buttons[0] or ih.is_key_down(pygame.K_f)
+        firing_held =  ih.is_key_down(pygame.K_f)
         if firing_held:
             if not self.charging:
                 self.charging = True
                 self.power = Config.PROJECTILE_MIN_POWER
-                self.aim_mode = 'mouse' if ih.mouse_buttons[0] else 'keyboard'
             else:
                 self.power = min(self.power + Config.CHARGE_RATE * dt, Config.PROJECTILE_MAX_POWER)
         elif self.charging:
@@ -141,11 +133,6 @@ class Game:
             self.has_fired = True
 
     def _aim_dir(self, player, origin):
-        if self.aim_mode == 'mouse':
-            aim = pygame.Vector2(self.input_handler.mouse_pos) - origin
-            if aim.length_squared() == 0:
-                aim = pygame.Vector2(1 if player.facing_right else -1, 0)
-            return aim.normalize()
         ang = math.radians(self.aim_angle)
         face = 1 if player.facing_right else -1
         return pygame.Vector2(math.cos(ang) * face, -math.sin(ang))

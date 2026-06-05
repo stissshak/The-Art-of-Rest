@@ -1,6 +1,6 @@
 import numpy as np
 
-def noise(x, y, seed=0):
+def noise(x, y, seed=42):
     # создание матрицы для шума и генерация случайного seed
     np.random.seed(seed)
     ptable = np.arange(256, dtype=int)

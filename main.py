@@ -25,6 +25,14 @@ class Game:
         self.input_handler = InputHandler()
         self.entity_manager = EntityManager()
         self.terrain = Terrain()
+        self.back_texture = pygame.image.load("/home/w1ldch1ld/Documents/Prog/python/TheGayestGame/The-Art-of-Rest/game/images/back.png").convert()
+        self.bg = pygame.Surface((Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT))
+
+        tw, th = self.back_texture.get_size()
+
+        for x in range(0, Config.SCREEN_WIDTH, tw):
+            for y in range(0, Config.SCREEN_HEIGHT, th):
+                self.bg.blit(self.back_texture, (x, y))
         self.physics_engine = PhysicsEngine(self.terrain)
 
         self._create_players()
@@ -43,6 +51,8 @@ class Game:
         self.shots = []               # [x0, y0, x1, y1, age] shotgun beam flashes
         self._f_prev = False          # previous F state, for rising-edge detection
         self.aim_angle = 45.0         # elevation in degrees for keyboard aiming
+
+
 
     WEAPON_NAMES = {1: "Bazooka", 2: "Rope", 3: "Shotgun"}
     
@@ -281,7 +291,9 @@ class Game:
             self.turn_manager.end_turn()
     
     def render(self):
-        self.screen.fill((135, 206, 235))
+        # self.screen.fill((135, 206, 235))
+
+        self.screen.blit(self.bg, (0, 0))
 
         self.terrain.draw(self.screen)
 

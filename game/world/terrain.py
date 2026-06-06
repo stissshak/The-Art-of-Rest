@@ -8,7 +8,7 @@ from . import perlin as pr
 class Terrain:
     COLORKEY = (255, 0, 255)
     DIRT = (110, 70, 40)
-    GRASS = (90, 170, 80)
+    GRASS = (55, 46, 39)
     CRATER_RIM = (70, 45, 25)
     GRASS_THICKNESS = 6
 
@@ -16,6 +16,7 @@ class Terrain:
         self.width = width if width is not None else Config.SCREEN_WIDTH
         self.height = height if height is not None else Config.SCREEN_HEIGHT
         self.seed = seed
+        self.dirt_texture = pygame.image.load(Config.BASE / "assets" / "text.png").convert()
 
         self.mask = self._generate_mask()
         self.surface = self._build_surface()
@@ -71,7 +72,16 @@ class Terrain:
 
         rgb = np.empty((w, h, 3), dtype=np.uint8)
         rgb[:, :] = self.COLORKEY
-        rgb[solid] = self.DIRT
+        
+        texture = pygame.surfarray.array3d(self.dirt_texture)
+        tw, th = texture.shape[:2]
+
+        x_idx = np.arange(w)[:, None] % tw
+        y_idx = np.arange(h)[None, :] % th
+
+        tiled_texture = texture[x_idx, y_idx]
+
+        rgb[solid] = tiled_texture[solid]
 
         above = np.zeros_like(solid)
         above[:, self.GRASS_THICKNESS:] = solid[:, :-self.GRASS_THICKNESS]

@@ -1,6 +1,10 @@
 # config.py
+from pathlib import Path
 
 class Config:
+    # Path
+    BASE = Path(__file__).resolve().parent
+
     # Display
     SCREEN_WIDTH = 1920
     SCREEN_HEIGHT = 1080
@@ -22,7 +26,7 @@ class Config:
     JUMP_COOLDOWN = 0.3         # seconds after landing before you can jump again
 
     # Turns
-    TURN_TIME = 20.0           # seconds per turn (Enter ends it early)
+    TURN_TIME = 45.0           # seconds per turn (Enter ends it early)
 
     # Weapons — switch with 1/2/3. Aim with Up/Down, fire/use with F.
     #   1 Bazooka  2 Rope  3 Shotgun

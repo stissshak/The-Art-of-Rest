@@ -25,7 +25,7 @@ class Game:
         self.input_handler = InputHandler()
         self.entity_manager = EntityManager()
         self.terrain = Terrain()
-        self.back_texture = pygame.image.load("/home/w1ldch1ld/Documents/Prog/python/TheGayestGame/The-Art-of-Rest/game/images/back.png").convert()
+        self.back_texture = pygame.image.load(Config.BASE / "assets" / "back.png").convert()
         self.bg = pygame.Surface((Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT))
 
         tw, th = self.back_texture.get_size()

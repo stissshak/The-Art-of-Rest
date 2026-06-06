@@ -13,8 +13,8 @@ class Player(Entity):
         self.max_hp = 100
         self.team = team
 
-        self.width = 20
-        self.height = 30
+        self.width = 18
+        self.height = 27
         self.on_ground = False
         self.facing_right = True
 
@@ -33,6 +33,25 @@ class Player(Entity):
         self.color = self._get_team_color()
         self.name = f"Worm {team}"
 
+        self.jump_sheet = pygame.image.load(Config.BASE / "assets" / "wjumpu.png").convert_alpha()
+        self.bazooka_sheet = pygame.image.load(Config.BASE / "assets" / "wbaz.png").convert_alpha()
+        self.jumpf_sheet = pygame.transform.flip(self.jump_sheet, True, False)
+        self.bazookaf_sheet = pygame.transform.flip(self.bazooka_sheet, True, False)
+        self.jump_sheet.set_colorkey((128, 128, 192))
+        self.bazooka_sheet.set_colorkey((128, 128, 192))
+        self.jumpf_sheet.set_colorkey((128, 128, 192))
+        self.bazookaf_sheet.set_colorkey((128, 128, 192))
+        
+        frame_h = 60
+        frame_w = 60
+
+        self.jump = self.jump_sheet.subsurface((0, 3*frame_h, frame_w, frame_h))
+        self.bazooka = self.bazooka_sheet.subsurface((0, 15*frame_h, frame_w, frame_h))
+
+        self.jumpf = self.jumpf_sheet.subsurface((0, 3*frame_h, frame_w, frame_h))
+        self.bazookaf = self.bazookaf_sheet.subsurface((0, 15*frame_h, frame_w, frame_h))
+
+        
     def _get_team_color(self):
         colors = [
             (255, 100, 100),  # Red team
@@ -108,7 +127,17 @@ class Player(Entity):
         self.hp = min(self.hp + amount, self.max_hp)
 
     def draw(self, screen: pygame.Surface):
-        pygame.draw.rect(screen, self.color, (self.position.x, self.position.y, self.width, self.height), width=1)
+        # pygame.draw.rect(screen, self.color, (self.position.x, self.position.y, self.width, self.height), width=1)
+        if not self.on_ground:
+            if self.facing_right:
+                screen.blit(self.jumpf, self.position - (9, 13))
+            else:
+                screen.blit(self.jump, self.position - (9, 13))
+        else:
+            if self.facing_right:
+                screen.blit(self.bazookaf, self.position - (17, 12))
+            else:
+                screen.blit(self.bazooka, self.position - (17, 12))
         self._draw_hp_bar(screen)
 
     def _draw_hp_bar(self, screen: pygame.Surface):
